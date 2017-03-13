@@ -10,6 +10,7 @@ ENVIRONMENT = {
 }
 
 class AclException(Exception):
+    error_code = "0000"
     def __init__(self, resp):
         """Initiates instance"""
         data = None
@@ -18,9 +19,11 @@ class AclException(Exception):
         except:
             pass
 
+        self.error_code = "0000" if data is None else data.get("code")
+
         message = "[{status_code}/{error_code}] - {msg}".format(
             status_code=resp.status_code,
-            error_code="0000" if data is None else data.get("code"),
+            error_code=self.error_code,
             msg="Unknow Error" if data is None else data.get("message")
         )
         super(AclException, self).__init__(message)
