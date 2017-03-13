@@ -1,9 +1,15 @@
 class SdkResource(object):
     def get_dict(self):
+        """Return dict with resource values"""
         pass
 
 class User(SdkResource):
     def __init__(self, user):
+        """Initiate instance
+
+        Keyword Arguments:
+        user -- dict
+        """
         self.id          = user.get("id")
         self.ingresse_id = user.get("ingresseId")
         self.email       = user.get("email")
@@ -11,6 +17,10 @@ class User(SdkResource):
         self.roles       = [ Role(item) for item in user.get("roles", []) ]
 
     def get_dict(self):
+        """Return dict with resource values
+
+        Return: dict
+        """
         return {
             "id": self.id,
             "ingresseId": self.ingresse_id,
@@ -19,6 +29,11 @@ class User(SdkResource):
 
 class Role(SdkResource):
     def __init__(self, role):
+        """Initiate instance
+
+        Keyword Arguments:
+        role -- dict
+        """
         self.id          = role.get("id")
         self.name        = role.get("name")
         self.alias       = role.get("alias")
@@ -27,6 +42,10 @@ class Role(SdkResource):
         self.permissions = [ RolePermission(item) for item in role.get("permissions", []) ]
 
     def get_dict(self):
+        """Return dict with resource values
+
+        Return: dict
+        """
         return {
             "id": self.id,
             "name": self.name,
@@ -38,12 +57,21 @@ class Role(SdkResource):
 
 class Permission(SdkResource):
     def __init__(self, permission):
+        """Initiate instance
+
+        Keyword Arguments:
+        permission -- dict
+        """
         self.id          = permission.get("id")
         self.name        = permission.get("name")
         self.alias       = permission.get("alias")
         self.description = permission.get("description")
 
     def get_dict(self):
+        """Return dict with resource values
+
+        Return: dict
+        """
         return {
             "id": self.id,
             "name": self.name,
@@ -61,6 +89,11 @@ class Context(Permission):
 
 class RolePermission(SdkResource):
     def __init__(self, permission):
+        """Initiate instance
+
+        Keyword Arguments:
+        permission -- dict
+        """
         self.permission     = permission.get("permission")
         self.resource       = permission.get("resourceName")
         self.resource_value = permission.get("resourceValue")
@@ -68,6 +101,10 @@ class RolePermission(SdkResource):
         self.context_value  = permission.get("contextValue")
 
     def get_dict(self):
+        """Return dict with resource values
+
+        Return: dict
+        """
         return {
             "permission":    self.permission,
             "resource":      self.resource,
