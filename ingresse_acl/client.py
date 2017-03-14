@@ -9,6 +9,67 @@ ENVIRONMENT = {
     "local":        "http://acl.ingresse.dev"
 }
 
+class AclError(object):
+    #Authorization
+    ACCESS_DENIED = 1000
+
+    #Database
+    PERMISSION_NOT_FOUND              = 5000
+    PERMISSION_UNABLE_REMOVAL         = 5001
+    ROLE_NOT_FOUND                    = 5004
+    ROLE_UNABLE_REMOVAL               = 5005
+    ROLE_SYSTEM_DENIED_REMOVAL        = 5006
+    RESOURCE_NOT_FOUND                = 5007
+    RESOURCE_UNABLE_REMOVAL           = 5008
+    USER_NOT_FOUND                    = 5009
+    USER_UNABLE_REMOVAL               = 5010
+    ROLE_SYSTEM_FLAGGED_DENIED_UPDATE = 5011
+    PERMISSION_INTEGRITY_ERROR        = 5013
+    RESOURCE_INTEGRITY_ERROR          = 5014
+    ROLE_INTEGRITY_ERROR              = 5015
+    USER_INTEGRITY_ERROR              = 5016
+    DATA_TO_LONG_ERROR                = 5017
+    USER_UNABLE_TO_ASSOCIATE_ROLE     = 5018
+    USER_UNABLE_TO_DISASSOCIATE_ROLE  = 5019
+    USER_ROLE_NOT_FOUND               = 5020
+    ROLE_UNABLE_TO_ASSOCIATE_PERM     = 5021
+    ROLE_UNABLE_TO_DISASSOCIATE_PERM  = 5022
+    CONTEXT_NOT_FOUND                 = 5023
+    CONTEXT_UNABLE_REMOVAL            = 5024
+    CONTEXT_INTEGRITY_ERROR           = 5025
+
+    #Usage
+    ALL_PARAMETERS_REQUIRED       = 4000
+    PERMISSION_ID_REQUIRED        = 4001
+    PERMISSION_ID_INTEGER         = 4002
+    RESOURCE_VALUE_REQUIRED       = 4003
+    ROLE_ID_REQUIRED              = 4005
+    ROLE_ID_INTEGER               = 4006
+    RESOURCE_ID_REQUIRED          = 4007
+    RESOURCE_ID_INTEGER           = 4008
+    EMAIL_REQUIRED                = 4009
+    INGRESSE_ID_INTEGER           = 4010
+    USER_ID_REQUIRED              = 4011
+    USER_ID_INTEGER               = 4012
+    PERMISSIONS_ARRAY             = 4013
+    RESOURCE_NAME_REQUIRED        = 4014
+    PERMISSION_NAME_REQUIRED      = 4015
+    INGRESSE_ID_REQUIRED          = 4016
+    PERMISSIONS_OBJECTS_MALFORMED = 4017
+    CONTEXT_ID_REQUIRED           = 4018
+    CONTEXT_ID_INTEGER            = 4019
+    JSON_REQUEST_TYPE             = 4020
+    RESOURCES_OBJECTS_MALFORMED   = 4021
+    CONTEXTS_OBJECTS_MALFORMED    = 4022
+    SYSTEM_BOOLEAN                = 4023
+    ROLES_OBJECTS_MALFORMED       = 4024
+    CONTEXT_REQUIRED              = 4025
+    RESOURCE_REQUIRED             = 4026
+    PERMISSION_REQUIRED           = 4027
+    ROLE_REQUIRED                 = 4028
+    SYSTEM_REQUIRED               = 4029
+
+
 class AclException(Exception):
     error_code = "0000"
     def __init__(self, resp):
