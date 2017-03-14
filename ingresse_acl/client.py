@@ -44,13 +44,23 @@ class AclClient(object):
     BATCH_ROLES       = "batch/roles"
     BATCH_ROLES_PERM  = "batch/roles/{role_term}/permissions"
 
-    def __init__(self, environment):
+    def __init__(self, environment=None):
         """Initiates instance
 
         Keyword Arguments:
         environment -- string
         """
-        self.host = ENVIRONMENT.get(environment, ENVIRONMENT.get("production"))
+        host = ENVIRONMENT.get(environment, environment)
+        if not host:
+            host = ENVIRONMENT.get("production")
+
+        if not "http" in host:
+            host = "http://{}".format(host)
+
+        if host[-1] == "/":
+            host = host[0:-1]
+
+        self.host = host
 
     def get(self, token, path, path_params={}, params={}):
         """Performs a GET request
