@@ -4,8 +4,8 @@ import requests
 import json
 
 ENVIRONMENT = {
-    "production":   "http://private.ip",
-    "homologation": "http://private.ip",
+    "production":   "http://10.21.1.120",
+    "homologation": "https://hml-acl.ingresse.com",
     "local":        "http://acl.ingresse.dev"
 }
 
