@@ -2,15 +2,15 @@ import unittest
 import mock
 import json
 
-from sdk import *
-from client    import AclException
-from client    import AclError
-from resources import User       as UserResource
-from resources import Role       as RoleResource
-from resources import Permission as PermissionResource
-from resources import Resource   as ResourceResource
-from resources import Context    as ContextResource
-from client    import AclClient
+from ingresse_acl.sdk import *
+from ingresse_acl.client    import AclException
+from ingresse_acl.client    import AclError
+from ingresse_acl.resources import User       as UserResource
+from ingresse_acl.resources import Role       as RoleResource
+from ingresse_acl.resources import Permission as PermissionResource
+from ingresse_acl.resources import Resource   as ResourceResource
+from ingresse_acl.resources import Context    as ContextResource
+from ingresse_acl.client    import AclClient
 
 class testBatch(unittest.TestCase):
     def test_method_execute(self):
@@ -97,7 +97,7 @@ class testBaseApp(unittest.TestCase):
 
 class testIngresseACL(unittest.TestCase):
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_instance(self, mock_client):
         token    = "MyToken"
         instance = IngresseACL(token)
@@ -111,7 +111,7 @@ class testIngresseACL(unittest.TestCase):
 
 class testValidation(unittest.TestCase):
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_validate(self, mock_client):
         user_id = 1234
         permission = 'perm'
@@ -145,7 +145,7 @@ class testValidation(unittest.TestCase):
         self.assertIsInstance(response, bool)
         self.assertTrue(response)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_validate_fail(self, mock_client):
         user_id = 1234
         permission = 'perm'
@@ -182,7 +182,7 @@ class testValidation(unittest.TestCase):
 
 class testUser(unittest.TestCase):
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_list(self, mock_client):
 
         mock_client.get.return_value = USER_LIST
@@ -203,7 +203,7 @@ class testUser(unittest.TestCase):
         for item in response:
             self.assertIsInstance(item, UserResource)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_get_with_id(self, mock_client):
 
         mock_client.get.return_value = USER_LIST[0]
@@ -221,7 +221,7 @@ class testUser(unittest.TestCase):
 
         self.assertIsInstance(response, UserResource)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_get_with_email(self, mock_client):
 
         mock_client.get.return_value = USER_LIST[0]
@@ -239,7 +239,7 @@ class testUser(unittest.TestCase):
 
         self.assertIsInstance(response, UserResource)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_create(self, mock_client):
 
         mock_client.post.return_value = USER_LIST[0]
@@ -258,7 +258,7 @@ class testUser(unittest.TestCase):
 
         self.assertIsInstance(response, UserResource)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_update_with_object(self, mock_client):
 
         user = UserResource(USER_LIST[0])
@@ -278,7 +278,7 @@ class testUser(unittest.TestCase):
 
         self.assertTrue(response)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_update_with_id(self, mock_client):
 
         user = UserResource(USER_LIST[0])
@@ -298,7 +298,7 @@ class testUser(unittest.TestCase):
 
         self.assertTrue(response)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_update_with_email(self, mock_client):
 
         user = UserResource(USER_LIST[0])
@@ -318,7 +318,7 @@ class testUser(unittest.TestCase):
 
         self.assertTrue(response)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_remove_with_object(self, mock_client):
 
         user = UserResource(USER_LIST[0])
@@ -337,7 +337,7 @@ class testUser(unittest.TestCase):
 
         self.assertTrue(response)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_remove_with_id(self, mock_client):
 
         user = UserResource(USER_LIST[0])
@@ -356,7 +356,7 @@ class testUser(unittest.TestCase):
 
         self.assertTrue(response)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_remove_with_email(self, mock_client):
 
         user = UserResource(USER_LIST[0])
@@ -375,7 +375,7 @@ class testUser(unittest.TestCase):
 
         self.assertTrue(response)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_add_role_with_objects(self, mock_client):
         user = UserResource(USER_LIST[0])
         role = RoleResource(ROLE_LIST[0])
@@ -395,7 +395,7 @@ class testUser(unittest.TestCase):
 
         self.assertIsInstance(response, UserResource)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_add_role_with_ids(self, mock_client):
         user = UserResource(USER_LIST[0])
         role = RoleResource(ROLE_LIST[0])
@@ -415,7 +415,7 @@ class testUser(unittest.TestCase):
 
         self.assertIsInstance(response, UserResource)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_add_role_with_terms(self, mock_client):
         user = UserResource(USER_LIST[0])
         role = RoleResource(ROLE_LIST[0])
@@ -435,7 +435,7 @@ class testUser(unittest.TestCase):
 
         self.assertIsInstance(response, UserResource)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_remove_role_with_objects(self, mock_client):
         user = UserResource(USER_LIST[0])
         role = RoleResource(ROLE_LIST[0])
@@ -459,7 +459,7 @@ class testUser(unittest.TestCase):
 
         self.assertIsInstance(response, UserResource)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_remove_role_with_ids(self, mock_client):
         user = UserResource(USER_LIST[0])
         role = RoleResource(ROLE_LIST[0])
@@ -483,7 +483,7 @@ class testUser(unittest.TestCase):
 
         self.assertIsInstance(response, UserResource)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_remove_role_with_terms(self, mock_client):
         user = UserResource(USER_LIST[0])
         role = RoleResource(ROLE_LIST[0])
@@ -507,7 +507,7 @@ class testUser(unittest.TestCase):
 
         self.assertIsInstance(response, UserResource)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_add_permission_with_objects(self, mock_client):
         user       = UserResource(USER_LIST[0])
         permission = PermissionResource({"id": 13})
@@ -544,7 +544,7 @@ class testUser(unittest.TestCase):
 
         self.assertIsInstance(response, UserResource)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_add_permission_with_ids(self, mock_client):
         user       = UserResource(USER_LIST[0])
         permission = PermissionResource({"id": 13})
@@ -581,7 +581,7 @@ class testUser(unittest.TestCase):
 
         self.assertIsInstance(response, UserResource)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_add_permission_with_names(self, mock_client):
         user       = UserResource(USER_LIST[0])
         permission = PermissionResource({"id": 13, 'name': 'perm-name'})
@@ -619,7 +619,7 @@ class testUser(unittest.TestCase):
 
         self.assertIsInstance(response, UserResource)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_remove_permission_with_objects(self, mock_client):
         user       = UserResource(USER_LIST[0])
         permission = PermissionResource({"id": 13})
@@ -656,7 +656,7 @@ class testUser(unittest.TestCase):
 
         self.assertIsInstance(response, UserResource)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_remove_permission_with_ids(self, mock_client):
         user       = UserResource(USER_LIST[0])
         permission = PermissionResource({"id": 13})
@@ -693,7 +693,7 @@ class testUser(unittest.TestCase):
 
         self.assertIsInstance(response, UserResource)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_remove_permission_with_names(self, mock_client):
         user       = UserResource(USER_LIST[0])
         permission = PermissionResource({"id": 13, 'name': 'perm-name'})
@@ -734,7 +734,7 @@ class testUser(unittest.TestCase):
 
 class testRole(unittest.TestCase):
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_list(self, mock_client):
 
         mock_client.get.return_value = ROLE_LIST
@@ -755,7 +755,7 @@ class testRole(unittest.TestCase):
         for item in response:
             self.assertIsInstance(item, RoleResource)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_get_with_id(self, mock_client):
 
         mock_client.get.return_value = ROLE_LIST[0]
@@ -773,7 +773,7 @@ class testRole(unittest.TestCase):
 
         self.assertIsInstance(response, RoleResource)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_get_with_name(self, mock_client):
 
         mock_client.get.return_value = ROLE_LIST[0]
@@ -791,7 +791,7 @@ class testRole(unittest.TestCase):
 
         self.assertIsInstance(response, RoleResource)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_create(self, mock_client):
 
         mock_client.post.return_value = ROLE_LIST[0]
@@ -812,7 +812,7 @@ class testRole(unittest.TestCase):
 
         self.assertIsInstance(response, RoleResource)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_update_with_object(self, mock_client):
 
         role = RoleResource(ROLE_LIST[0])
@@ -832,7 +832,7 @@ class testRole(unittest.TestCase):
 
         self.assertTrue(response)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_update_with_id(self, mock_client):
 
         role = RoleResource(ROLE_LIST[0])
@@ -853,7 +853,7 @@ class testRole(unittest.TestCase):
 
         self.assertTrue(response)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_update_with_name(self, mock_client):
 
         role = RoleResource(ROLE_LIST[0])
@@ -874,7 +874,7 @@ class testRole(unittest.TestCase):
 
         self.assertTrue(response)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_remove_with_object(self, mock_client):
 
         role = RoleResource(ROLE_LIST[0])
@@ -893,7 +893,7 @@ class testRole(unittest.TestCase):
 
         self.assertTrue(response)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_remove_with_id(self, mock_client):
 
         role = RoleResource(ROLE_LIST[0])
@@ -912,7 +912,7 @@ class testRole(unittest.TestCase):
 
         self.assertTrue(response)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_remove_with_name(self, mock_client):
 
         role = RoleResource(ROLE_LIST[0])
@@ -931,7 +931,7 @@ class testRole(unittest.TestCase):
 
         self.assertTrue(response)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_add_permission_with_objects(self, mock_client):
         role       = RoleResource(ROLE_LIST[0])
         permission = PermissionResource({"id": 13})
@@ -968,7 +968,7 @@ class testRole(unittest.TestCase):
 
         self.assertIsInstance(response, RoleResource)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_add_permission_with_ids(self, mock_client):
         role       = RoleResource(ROLE_LIST[0])
         permission = PermissionResource({"id": 13})
@@ -1005,7 +1005,7 @@ class testRole(unittest.TestCase):
 
         self.assertIsInstance(response, RoleResource)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_add_permission_with_names(self, mock_client):
         role       = RoleResource(ROLE_LIST[0])
         permission = PermissionResource({"id": 13, 'name': 'perm-name'})
@@ -1043,7 +1043,7 @@ class testRole(unittest.TestCase):
 
         self.assertIsInstance(response, RoleResource)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_remove_permission_with_objects(self, mock_client):
         role       = RoleResource(ROLE_LIST[0])
         permission = PermissionResource({"id": 13})
@@ -1080,7 +1080,7 @@ class testRole(unittest.TestCase):
 
         self.assertIsInstance(response, RoleResource)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_remove_permission_with_ids(self, mock_client):
         role       = RoleResource(ROLE_LIST[0])
         permission = PermissionResource({"id": 13})
@@ -1117,7 +1117,7 @@ class testRole(unittest.TestCase):
 
         self.assertIsInstance(response, RoleResource)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_remove_permission_with_names(self, mock_client):
         role       = RoleResource(ROLE_LIST[0])
         permission = PermissionResource({"id": 13, 'name': 'perm-name'})
@@ -1158,7 +1158,7 @@ class testRole(unittest.TestCase):
 
 class testBatchUser(unittest.TestCase):
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_execute_with_objects(self, mock_client):
         user       = UserResource(USER_LIST[0])
         permission = PermissionResource({"id": 13, 'name': 'perm-name'})
@@ -1193,7 +1193,7 @@ class testBatchUser(unittest.TestCase):
 
         self.assertTrue(response)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_execute_with_ids(self, mock_client):
         user       = UserResource(USER_LIST[0])
         permission = PermissionResource({"id": 13, 'name': 'perm-name'})
@@ -1228,7 +1228,7 @@ class testBatchUser(unittest.TestCase):
 
         self.assertTrue(response)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_execute_with_terms(self, mock_client):
         user       = UserResource(USER_LIST[0])
         permission = PermissionResource({"id": 13, 'name': 'perm-name'})
@@ -1263,7 +1263,7 @@ class testBatchUser(unittest.TestCase):
 
         self.assertTrue(response)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_execute_fail(self, mock_client):
         token    = "MyToken"
         instance = BatchUser()
@@ -1278,7 +1278,7 @@ class testBatchUser(unittest.TestCase):
 
 class testBatchRole(unittest.TestCase):
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_execute_permission_with_objects(self, mock_client):
         role       = RoleResource(ROLE_LIST[0])
         permission = PermissionResource({"id": 13, 'name': 'perm-name'})
@@ -1313,7 +1313,7 @@ class testBatchRole(unittest.TestCase):
 
         self.assertEqual([], response)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_execute_permission_with_ids(self, mock_client):
         role       = RoleResource(ROLE_LIST[0])
         permission = PermissionResource({"id": 13, 'name': 'perm-name'})
@@ -1348,7 +1348,7 @@ class testBatchRole(unittest.TestCase):
 
         self.assertEqual([], response)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_execute_permission_with_names(self, mock_client):
         role       = RoleResource(ROLE_LIST[0])
         permission = PermissionResource({"id": 13, 'name': 'perm-name'})
@@ -1383,7 +1383,7 @@ class testBatchRole(unittest.TestCase):
 
         self.assertEqual([], response)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_execute_roles(self, mock_client):
         role = RoleResource(ROLE_LIST[0])
 
@@ -1411,7 +1411,7 @@ class testBatchRole(unittest.TestCase):
         self.assertEqual(1, len(response))
         self.assertIsInstance(response[0], RoleResource)
 
-    @mock.patch('client.AclClient')
+    @mock.patch('ingresse_acl.client.AclClient')
     def test_execute_fail(self, mock_client):
         permission = PermissionResource({"id": 13, 'name': 'perm-name'})
         resource   = ResourceResource({"id": 14, 'name': 'res-name'})

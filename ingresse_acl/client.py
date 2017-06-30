@@ -1,4 +1,4 @@
-from sdk import VERSION
+from ingresse_acl.sdk import VERSION
 
 import requests
 import json

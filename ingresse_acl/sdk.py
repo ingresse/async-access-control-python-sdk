@@ -1,14 +1,14 @@
 VERSION = '0.0.2'
 
-from client    import AclClient
-from client    import AclException
-from client    import AclError
-from resources import SdkResource
-from resources import User       as UserResource
-from resources import Role       as RoleResource
-from resources import Permission as PermissionResource
-from resources import Resource   as ResourceResource
-from resources import Context    as ContextResource
+from ingresse_acl.client    import AclClient
+from ingresse_acl.client    import AclException
+from ingresse_acl.client    import AclError
+from ingresse_acl.resources import SdkResource
+from ingresse_acl.resources import User       as UserResource
+from ingresse_acl.resources import Role       as RoleResource
+from ingresse_acl.resources import Permission as PermissionResource
+from ingresse_acl.resources import Resource   as ResourceResource
+from ingresse_acl.resources import Context    as ContextResource
 
 class BaseApp(object):
     token  = None
