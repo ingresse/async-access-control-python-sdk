@@ -3,6 +3,8 @@ import mock
 import json
 
 from sdk import *
+from client    import AclException
+from client    import AclError
 from resources import User       as UserResource
 from resources import Role       as RoleResource
 from resources import Permission as PermissionResource
@@ -105,6 +107,77 @@ class testIngresseACL(unittest.TestCase):
         self.assertIsInstance(instance.Role, Role)
         self.assertIsInstance(instance.BatchUser, BatchUser)
         self.assertIsInstance(instance.BatchRole, BatchRole)
+
+
+class testValidation(unittest.TestCase):
+
+    @mock.patch('client.AclClient')
+    def test_validate(self, mock_client):
+        user_id = 1234
+        permission = 'perm'
+        resource = 'my-respurce'
+        resource_val = 54321
+        context = 'my-context'
+        context_val = 433987
+
+        mock_client.get.return_value = True
+
+        params = {
+            "ingresseId": user_id,
+            "permission": permission,
+            "resource": resource,
+            "resourceValue": resource_val,
+            "contextValue": context_val,
+            "context": context
+        }
+
+        token    = "MyToken"
+        instance = Validate()
+        instance.token  = token
+        instance.client = mock_client
+
+        response = instance.validate(user_id, permission, resource, resource_val,
+            context, context_val)
+
+        mock_client.get.assert_called_with(token=token, path=AclClient.VALIDATE,
+            params=params)
+
+        self.assertIsInstance(response, bool)
+        self.assertTrue(response)
+
+    @mock.patch('client.AclClient')
+    def test_validate_fail(self, mock_client):
+        user_id = 1234
+        permission = 'perm'
+        resource = 'my-respurce'
+        resource_val = 54321
+        context = 'my-context'
+        context_val = 433987
+
+        mock_client.get.return_value = False
+
+        params = {
+            "ingresseId": user_id,
+            "permission": permission,
+            "resource": resource,
+            "resourceValue": resource_val,
+            "contextValue": context_val,
+            "context": context
+        }
+
+        token    = "MyToken"
+        instance = Validate()
+        instance.token  = token
+        instance.client = mock_client
+
+        response = instance.validate(user_id, permission, resource, resource_val,
+            context, context_val)
+
+        mock_client.get.assert_called_with(token=token, path=AclClient.VALIDATE,
+            params=params)
+
+        self.assertIsInstance(response, bool)
+        self.assertFalse(response)
 
 
 class testUser(unittest.TestCase):

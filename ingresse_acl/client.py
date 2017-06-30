@@ -97,6 +97,8 @@ class AclClient(object):
     USERS_ROLES_UNIQUE = "users/{user_term}/roles/{role_id}"
     USERS_PERMS        = "users/{user_term}/permissions"
 
+    VALIDATE = "validate"
+
     ROLES        = "roles"
     ROLES_UNIQUE = "roles/{role_term}"
     ROLES_PERMS  = "roles/{role_term}/permissions"

@@ -1,6 +1,8 @@
-VERSION = '0.0.1'
+VERSION = '0.0.2'
 
 from client    import AclClient
+from client    import AclException
+from client    import AclError
 from resources import SdkResource
 from resources import User       as UserResource
 from resources import Role       as RoleResource
@@ -74,6 +76,10 @@ class IngresseACL(object):
         self.User.token  = self.token
         self.User.client = self.client
 
+        self.Validate = Validate()
+        self.Validate.token  = self.token
+        self.Validate.client = self.client
+
         self.Role = Role()
         self.Role.token  = self.token
         self.Role.client = self.client
@@ -85,6 +91,27 @@ class IngresseACL(object):
         self.BatchRole = BatchRole()
         self.BatchRole.token  = self.token
         self.BatchRole.client = self.client
+
+
+class Validate(BaseApp):
+
+    def validate(self, user_id, permission, resource, resource_value="__ANY__",
+        context=None, context_value="__ANY__"):
+
+        query_params = {
+            "ingresseId": user_id,
+            "permission": permission,
+            "resource": resource,
+            "resourceValue": resource_value,
+            "contextValue": context_value
+        }
+
+        if context:
+            query_params.update({"context": context})
+
+        return self.client.get(token=self.token, path=AclClient.VALIDATE,
+            params=query_params)
+
 
 class User(BaseApp):
 
