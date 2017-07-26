@@ -1,4 +1,4 @@
-from sdk import VERSION
+from ingresse_acl.sdk import VERSION
 
 import requests
 import json
@@ -96,6 +96,8 @@ class AclClient(object):
     USERS_ROLES        = "users/{user_term}/roles"
     USERS_ROLES_UNIQUE = "users/{user_term}/roles/{role_id}"
     USERS_PERMS        = "users/{user_term}/permissions"
+
+    VALIDATE = "validate"
 
     ROLES        = "roles"
     ROLES_UNIQUE = "roles/{role_term}"

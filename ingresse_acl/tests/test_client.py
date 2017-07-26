@@ -2,8 +2,8 @@ import unittest
 import mock
 import json
 
-from client import *
-from sdk import VERSION
+from ingresse_acl.client import *
+from ingresse_acl.sdk import VERSION
 
 class testAclException(unittest.TestCase):
 
@@ -27,7 +27,7 @@ class testAclException(unittest.TestCase):
 
 class testAclClient(unittest.TestCase):
 
-    @mock.patch('client.requests')
+    @mock.patch('ingresse_acl.client.requests')
     def test_get(self, mock_requests):
         token = 'my-token'
         path = "users/{term}"
@@ -50,7 +50,7 @@ class testAclClient(unittest.TestCase):
 
         self.assertTrue(response)
 
-    @mock.patch('client.requests')
+    @mock.patch('ingresse_acl.client.requests')
     def test_post(self, mock_requests):
         token = 'my-token'
         path = "users/{term}"
@@ -74,7 +74,7 @@ class testAclClient(unittest.TestCase):
 
         self.assertTrue(response)
 
-    @mock.patch('client.requests')
+    @mock.patch('ingresse_acl.client.requests')
     def test_put(self, mock_requests):
         token = 'my-token'
         path = "users/{term}"
@@ -98,7 +98,7 @@ class testAclClient(unittest.TestCase):
 
         self.assertTrue(response)
 
-    @mock.patch('client.requests')
+    @mock.patch('ingresse_acl.client.requests')
     def test_delete(self, mock_requests):
         token = 'my-token'
         path = "users/{term}"
@@ -121,7 +121,7 @@ class testAclClient(unittest.TestCase):
 
         self.assertTrue(response)
 
-    @mock.patch('client.requests')
+    @mock.patch('ingresse_acl.client.requests')
     def test_fail(self, mock_requests):
         token = 'my-token'
         path = "users/{term}"
