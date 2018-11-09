@@ -40,6 +40,7 @@ class Role(SdkResource):
         self.description = role.get("description")
         self.system      = role.get("system")
         self.permissions = [ RolePermission(item) for item in role.get("permissions", []) ]
+        self.users       = [ User(item) for item in role.get("users", []) ]
 
     def get_dict(self):
         """Return dict with resource values
@@ -51,7 +52,9 @@ class Role(SdkResource):
             "name": self.name,
             "alias": self.alias,
             "description": self.description,
-            "system": self.system
+            "system": self.system,
+            "users": self.users,
+
         }
 
 
