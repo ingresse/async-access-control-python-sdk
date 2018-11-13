@@ -1,4 +1,4 @@
-VERSION = '0.2.1'
+VERSION = '0.2.2'
 
 from ingresse_acl.client    import AclClient
 from ingresse_acl.client    import AclException
@@ -210,7 +210,7 @@ class User(BaseApp):
         user -- mixed (integer, string or resources.User)
         role -- mixed (integer, string or resources.Role)
 
-        Returns: resources.User
+        Returns: boolean
         """
         if isinstance(user, UserResource):
             user = user.id
@@ -218,11 +218,9 @@ class User(BaseApp):
         if isinstance(role, RoleResource):
             role = role.id
 
-        resp = self.client.delete(token=self.token,
+        return self.client.delete(token=self.token,
             path=AclClient.USERS_ROLES_UNIQUE,
             path_params={"user_term":user, "role_id":role})
-
-        return self.get(user)
 
     def add_permission(self, user, permission, resource, resource_value,
         context=None, context_value=None):
@@ -236,14 +234,13 @@ class User(BaseApp):
         context        -- mixed (integer, string or resources.Context)
         context_value  -- string
 
-        Returns: resources.User
+        Returns: boolean
         """
         user, body = self._get_permission_params(user, permission, resource,
             resource_value, context, context_value)
-        self.client.post(token=self.token, body=body,
-            path=AclClient.USERS_PERMS, path_params={"user_term":user})
 
-        return self.get(user)
+        return self.client.post(token=self.token, body=body,
+            path=AclClient.USERS_PERMS, path_params={"user_term":user})
 
     def remove_permission(self, user, permission, resource, resource_value,
         context=None, context_value=None):
@@ -257,14 +254,13 @@ class User(BaseApp):
         context        -- mixed (integer, string or resources.Context)
         context_value  -- string
 
-        Returns: resources.User
+        Returns: boolean
         """
         user, param = self._get_permission_params(user, permission,
             resource, resource_value, context, context_value)
-        self.client.delete(token=self.token, params=param,
-            path=AclClient.USERS_PERMS, path_params={"user_term":user})
 
-        return self.get(user)
+        return self.client.delete(token=self.token, params=param,
+            path=AclClient.USERS_PERMS, path_params={"user_term":user})
 
 class Role(BaseApp):
 
