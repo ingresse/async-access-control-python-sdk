@@ -102,6 +102,7 @@ class AclClient(object):
     ROLES        = "roles"
     ROLES_UNIQUE = "roles/{role_term}"
     ROLES_PERMS  = "roles/{role_term}/permissions"
+    ROLES_USERS  = "roles/{role_id}/users"
 
     BATCH_USERS_PERM  = "batch/users/{user_term}/permissions"
     BATCH_ROLES       = "batch/roles"

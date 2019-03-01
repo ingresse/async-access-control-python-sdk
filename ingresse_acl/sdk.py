@@ -327,6 +327,25 @@ class Role(BaseApp):
         return self.client.put(token=self.token, body=role_body,
             path=AclClient.ROLES_UNIQUE, path_params={"role_term":role})
 
+    def update_users(self, role, users):
+        """Update role users
+
+        Keyword Arguments:
+        role_id     -- integer
+        users       -- list
+
+        Returns: boolean
+        """
+        if isinstance(role, RoleResource):
+            role = role.id
+
+        body = {
+            "users": users
+        }
+
+        return self.client.put(token=self.token, body=body,
+            path=AclClient.ROLES_USERS, path_params={"role_id":role})
+
     def remove(self, role):
         """Remove a Role
 
