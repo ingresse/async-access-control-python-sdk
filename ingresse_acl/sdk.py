@@ -185,6 +185,27 @@ class User(BaseApp):
         return self.client.delete(token=self.token,
             path=AclClient.USERS_UNIQUE, path_params={"user_term":user})
 
+    def get_roles(self, user, names=None):
+        """Get the roles of an user
+
+        Keyword Arguments:
+        user           -- mixed (integer or resources.User)
+        role_name      -- string
+        role_name_like -- string
+        """
+        if isinstance(user, UserResource):
+            user = user.id
+
+        query_params = {}
+
+        if names:
+            query_params['names'] = names
+
+        resp = self.client.get(token=self.token, params=query_params,
+        path=AclClient.USERS_ROLES, path_params={"user_term":user})
+
+        return RoleResource(resp)
+
     def add_role(self, user, role):
         """Add a role to a user
 
