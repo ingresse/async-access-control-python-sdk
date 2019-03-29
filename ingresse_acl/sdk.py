@@ -1,4 +1,4 @@
-VERSION = '0.2.2'
+VERSION = '0.2.5'
 
 from ingresse_acl.client    import AclClient
 from ingresse_acl.client    import AclException
