@@ -1,8 +1,8 @@
 import unittest
-import mock
 import json
 
-from ingresse_acl.sdk import *
+from unittest               import mock
+from ingresse_acl.sdk       import *
 from ingresse_acl.client    import AclException
 from ingresse_acl.client    import AclError
 from ingresse_acl.resources import User       as UserResource
@@ -374,6 +374,64 @@ class testUser(unittest.TestCase):
             path=AclClient.USERS_UNIQUE, path_params={"user_term": user.email})
 
         self.assertTrue(response)
+    
+    @mock.patch('ingresse_acl.client.AclClient')
+    def test_get_roles_with_object(self, mock_client):
+        user = UserResource(USER_LIST[0])
+        mock_client.get.return_value = ROLE_LIST[0]
+
+        token    = "MyToken"
+        instance = User()
+        instance.token  = token
+        instance.client = mock_client
+
+        response = instance.get_roles(user)
+
+        mock_client.get.assert_called_with(token=token,
+            path=AclClient.USERS_ROLES, params={},
+            path_params={"user_term": user.id})
+
+        self.assertIsInstance(response, RoleResource)
+
+    @mock.patch('ingresse_acl.client.AclClient')
+    def test_get_roles_with_id(self, mock_client):
+        user = UserResource(USER_LIST[0])
+        mock_client.get.return_value = ROLE_LIST[0]
+
+        token    = "MyToken"
+        instance = User()
+        instance.token  = token
+        instance.client = mock_client
+
+        response = instance.get_roles(user.id)
+
+        mock_client.get.assert_called_with(token=token,
+            path=AclClient.USERS_ROLES, params={},
+            path_params={"user_term": user.id})
+
+        self.assertIsInstance(response, RoleResource)
+    
+    @mock.patch('ingresse_acl.client.AclClient')
+    def test_get_roles_with_id_and_role_name(self, mock_client):
+        user = UserResource(USER_LIST[0])
+        role = RoleResource(ROLE_LIST[0])
+
+        mock_client.get.return_value = ROLE_LIST[0]
+
+        token    = "MyToken"
+        instance = User()
+        instance.token  = token
+        instance.client = mock_client
+        query_params = {
+            'names': role.name
+        }
+
+        response = instance.get_roles(user.id, names=role.name)
+        mock_client.get.assert_called_with(token=token,
+            path=AclClient.USERS_ROLES, params=query_params,
+            path_params={"user_term": user.id})
+
+        self.assertIsInstance(response, RoleResource)
 
     @mock.patch('ingresse_acl.client.AclClient')
     def test_add_role_with_objects(self, mock_client):
