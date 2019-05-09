@@ -6,7 +6,7 @@ import json
 ENVIRONMENT = {
     "production":   "https://acl.ingresse.com",
     "homologation": "https://hml-acl.ingresse.com",
-    "local":        "http://acl.ingresse.dev"
+    "local":        "http://acl.ingresse.local"
 }
 
 class AclError(object):

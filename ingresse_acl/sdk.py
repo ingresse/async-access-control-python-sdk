@@ -123,31 +123,35 @@ class User(BaseApp):
         resp = self.client.get(token=self.token, path=AclClient.USERS)
         return [UserResource(user) for user in resp]
 
-    def get(self, user_term):
+    def get(self, user_term, company_id=1):
         """Return a user
 
         Keyword Arguments:
         user_term -- string - (Id or Email)
+        company_id -- integer
 
         Returns: resources.User
         """
         resp = self.client.get(token=self.token,
             path=AclClient.USERS_UNIQUE,
-            path_params={"user_term":user_term})
+            path_params={"user_term":user_term},
+            params={"companyId": company_id})
         return UserResource(resp)
 
-    def create(self, ingresse_id, email):
+    def create(self, ingresse_id, email, company_id=1):
         """Create and return a user
 
         Keyword Arguments:
         ingresse_id -- integer - User id on Ingresse environment
         email       -- string
+        company_id  -- integer
 
         Returns: resources.User
         """
         user_body = {
             'ingresseId': ingresse_id,
-            'email': email
+            'email': email,
+            'companyId': company_id
         }
         resp = self.client.post(token=self.token, body=user_body,
             path=AclClient.USERS)
@@ -293,33 +297,37 @@ class Role(BaseApp):
         resp = self.client.get(token=self.token, path=AclClient.ROLES)
         return [RoleResource(user) for user in resp]
 
-    def get(self, role_term):
+    def get(self, role_term, company_id=1):
         """Return a role
 
         Keyword Arguments:
         role_term -- string - (Id or Name)
+        company_id -- integer
 
         Returns: resources.Role
         """
         resp = self.client.get(token=self.token,
             path=AclClient.ROLES_UNIQUE,
-            path_params={"role_term":role_term})
+            path_params={"role_term":role_term},
+            params={"companyId": company_id})
         return RoleResource(resp)
 
-    def create(self, name, alias, description):
+    def create(self, name, alias, description, company_id=1):
         """Create and return a role
 
         Keyword Arguments:
         name        -- string
         alias       -- string
         description -- string
+        company_id  -- integer
 
         Returns: resources.Role
         """
         role_body = {
             'name': name,
             'alias': alias,
-            'description': description
+            'description': description,
+            'companyId': company_id
         }
         resp = self.client.post(token=self.token, body=role_body,
             path=AclClient.ROLES)
