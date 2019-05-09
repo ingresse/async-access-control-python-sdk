@@ -96,14 +96,15 @@ class IngresseACL(object):
 class Validate(BaseApp):
 
     def validate(self, user_id, permission, resource, resource_value="__ANY__",
-        context=None, context_value="__ANY__"):
+        context=None, context_value="__ANY__", company_id=1):
 
         query_params = {
             "ingresseId": user_id,
             "permission": permission,
             "resource": resource,
             "resourceValue": resource_value,
-            "contextValue": context_value
+            "contextValue": context_value,
+            "companyId": company_id
         }
 
         if context:
