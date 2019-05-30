@@ -356,12 +356,13 @@ class Role(BaseApp):
         return self.client.put(token=self.token, body=role_body,
             path=AclClient.ROLES_UNIQUE, path_params={"role_term":role})
 
-    def update_users(self, role, users):
+    def update_users(self, role, users, company_id=1):
         """Update role users
 
         Keyword Arguments:
         role_id     -- integer
         users       -- list
+        company_id  -- integer
 
         Returns: boolean
         """
@@ -369,7 +370,8 @@ class Role(BaseApp):
             role = role.id
 
         body = {
-            "users": users
+            "users": users,
+            "companyId": company_id
         }
 
         return self.client.put(token=self.token, body=body,
