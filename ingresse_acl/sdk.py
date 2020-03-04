@@ -62,7 +62,7 @@ class Batch(BaseApp):
 class IngresseACL(object):
     token = None
 
-    def __init__(self, token, environment='production'):
+    def __init__(self, token, host=None):
         """ Initiate instance
 
         Keyword Arguments:
@@ -70,7 +70,7 @@ class IngresseACL(object):
         environment -- string
         """
         self.token  = token
-        self.client = AclClient(environment)
+        self.client = AclClient(host)
 
         self.User = User()
         self.User.token  = self.token
