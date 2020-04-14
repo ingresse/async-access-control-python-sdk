@@ -3,11 +3,7 @@ from ingresse_acl.sdk import VERSION
 import requests
 import json
 
-ENVIRONMENT = {
-    "production":   "https://acl.ingresse.com",
-    "homologation": "https://hml-acl.ingresse.com",
-    "local":        "http://acl.ingresse.local"
-}
+HOST = "https://acl.ingresse.com"
 
 class AclError(object):
     #Authorization
@@ -108,15 +104,14 @@ class AclClient(object):
     BATCH_ROLES       = "batch/roles"
     BATCH_ROLES_PERM  = "batch/roles/{role_term}/permissions"
 
-    def __init__(self, environment=None):
+    def __init__(self, host=None):
         """Initiates instance
 
         Keyword Arguments:
         environment -- string
         """
-        host = ENVIRONMENT.get(environment, environment)
         if not host:
-            host = ENVIRONMENT.get("production")
+            host = HOST
 
         if not "http" in host:
             host = "http://{}".format(host)
