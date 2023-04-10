@@ -1,6 +1,6 @@
 from ingresse_acl.sdk import VERSION
 
-import requests
+import httpx
 import json
 
 HOST = "https://acl.ingresse.com"
@@ -120,8 +120,11 @@ class AclClient(object):
             host = host[0:-1]
 
         self.host = host
+        
+        with httpx.AsyncClient() as client:
+            self.client = client
 
-    def get(self, token, path, path_params={}, params={}):
+    async def get(self, token, path, path_params={}, params={}):
         """Performs a GET request
 
         Keyword Arguments:
@@ -132,13 +135,13 @@ class AclClient(object):
 
         Returns: mixed
         """
-        url     = self.__get_url(path, path_params)
-        headers = self.__get_header(token, 'get')
-        response = requests.get(url, headers=headers, params=params)
-        self.__validate_response(response)
+        url     = await self.__get_url(path, path_params)
+        headers = await self.__get_header(token, 'get')
+        response = await self.client.get(url, headers=headers, params=params)
+        await self.__validate_response(response)
         return response.json().get('data', {})
 
-    def post(self, token, path, path_params={}, body={}):
+    async def post(self, token, path, path_params={}, body={}):
         """Performs a POST request
 
         Keyword Arguments:
@@ -149,13 +152,13 @@ class AclClient(object):
 
         Returns: mixed
         """
-        url     = self.__get_url(path, path_params)
-        headers = self.__get_header(token, 'post')
-        response = requests.post(url, headers=headers, data=json.dumps(body))
-        self.__validate_response(response)
+        url     = await self.__get_url(path, path_params)
+        headers = await self.__get_header(token, 'post')
+        response = await self.client.post(url, headers=headers, data=json.dumps(body))
+        await self.__validate_response(response)
         return response.json().get('data', {})
 
-    def put(self, token, path, path_params={}, body={}):
+    async def put(self, token, path, path_params={}, body={}):
         """Performs a PUT request
 
         Keyword Arguments:
@@ -166,13 +169,13 @@ class AclClient(object):
 
         Returns: boolean
         """
-        url     = self.__get_url(path, path_params)
-        headers = self.__get_header(token, 'put')
-        response = requests.put(url, headers=headers, data=json.dumps(body))
-        self.__validate_response(response)
+        url     = await self.__get_url(path, path_params)
+        headers = await self.__get_header(token, 'put')
+        response = await self.client.put(url, headers=headers, data=json.dumps(body))
+        await self.__validate_response(response)
         return True
 
-    def delete(self, token, path, path_params={}, params={}):
+    async def delete(self, token, path, path_params={}, params={}):
         """Performs a DELETE request
 
         Keyword Arguments:
@@ -183,17 +186,17 @@ class AclClient(object):
 
         Returns: boolean
         """
-        url     = self.__get_url(path, path_params)
-        headers = self.__get_header(token, 'delete')
-        response = requests.delete(url, headers=headers, params=params)
-        self.__validate_response(response)
+        url     = await self.__get_url(path, path_params)
+        headers = await self.__get_header(token, 'delete')
+        response = await self.client.delete(url, headers=headers, params=params)
+        await self.__validate_response(response)
         return True
 
-    def __validate_response(self, response):
+    async def __validate_response(self, response):
         """Validates the response
 
         Keyword Arguments:
-        response -- requests.Response
+        response -- 
 
         Raises:
         - AclException
@@ -201,7 +204,7 @@ class AclClient(object):
         if response.status_code not in [200, 204]:
             raise AclException(response)
 
-    def __get_url(self, path, params):
+    async def __get_url(self, path, params):
         """Get the URL
 
         Keyword Arguments:
@@ -212,7 +215,7 @@ class AclClient(object):
         """
         return "{}/{}".format(self.host, path.format(**params))
 
-    def __get_header(self, token, method):
+    async def __get_header(self, token, method):
         """Get the Header
 
         Keyword Arguments:

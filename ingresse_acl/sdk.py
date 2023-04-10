@@ -1,5 +1,3 @@
-VERSION = '0.2.5'
-
 from ingresse_acl.client    import AclClient
 from ingresse_acl.client    import AclException
 from ingresse_acl.client    import AclError
@@ -14,7 +12,7 @@ class BaseApp(object):
     token  = None
     client = None
 
-    def _get_permission_params(self, item, permission, resource, resource_value,
+    async def _get_permission_params(self, item, permission, resource, resource_value,
         context=None, context_value=None):
         """ Get item id and Permissions dict
 
@@ -55,9 +53,9 @@ class BaseApp(object):
         return item, params
 
 class Batch(BaseApp):
-        def execute(self):
-            """ Executes Batch"""
-            pass
+    async def execute(self):
+        """ Executes Batch"""
+        pass
 
 class IngresseACL(object):
     token = None
@@ -95,7 +93,7 @@ class IngresseACL(object):
 
 class Validate(BaseApp):
 
-    def validate(self, user_id, permission, resource, resource_value="__ANY__",
+    async def validate(self, user_id, permission, resource, resource_value="__ANY__",
         context=None, context_value="__ANY__", company_id=1):
 
         query_params = {
@@ -116,7 +114,7 @@ class Validate(BaseApp):
 
 class User(BaseApp):
 
-    def list(self):
+    async def list(self):
         """Return a user list
 
         Returns: list
@@ -124,7 +122,7 @@ class User(BaseApp):
         resp = self.client.get(token=self.token, path=AclClient.USERS)
         return [UserResource(user) for user in resp]
 
-    def get(self, user_term, company_id=1):
+    async def get(self, user_term, company_id=1):
         """Return a user
 
         Keyword Arguments:
@@ -139,7 +137,7 @@ class User(BaseApp):
             params={"companyId": company_id})
         return UserResource(resp)
 
-    def create(self, ingresse_id, email, company_id=1):
+    async def create(self, ingresse_id, email, company_id=1):
         """Create and return a user
 
         Keyword Arguments:
@@ -158,7 +156,7 @@ class User(BaseApp):
             path=AclClient.USERS)
         return UserResource(resp)
 
-    def update(self, user, email=None):
+    async def update(self, user, email=None):
         """Update a User
 
         Keyword Arguments:
@@ -176,7 +174,7 @@ class User(BaseApp):
         return self.client.put(token=self.token, body=user_body,
             path=AclClient.USERS_UNIQUE, path_params={"user_term":user})
 
-    def remove(self, user):
+    async def remove(self, user):
         """Remove a user
 
         Keyword Arguments:
@@ -190,7 +188,7 @@ class User(BaseApp):
         return self.client.delete(token=self.token,
             path=AclClient.USERS_UNIQUE, path_params={"user_term":user})
 
-    def get_roles(self, user, names=None):
+    async def get_roles(self, user, names=None):
         """Get the roles of an user
 
         Keyword Arguments:
@@ -211,7 +209,7 @@ class User(BaseApp):
 
         return RoleResource(resp)
 
-    def add_role(self, user, role):
+    async def add_role(self, user, role):
         """Add a role to a user
 
         Keyword Arguments:
@@ -229,7 +227,7 @@ class User(BaseApp):
 
         return UserResource(resp)
 
-    def remove_role(self, user, role):
+    async def remove_role(self, user, role):
         """Remove a role from a user
 
         Keyword Arguments:
@@ -248,7 +246,7 @@ class User(BaseApp):
             path=AclClient.USERS_ROLES_UNIQUE,
             path_params={"user_term":user, "role_id":role})
 
-    def add_permission(self, user, permission, resource, resource_value,
+    async def add_permission(self, user, permission, resource, resource_value,
         context=None, context_value=None):
         """Add a permission to a user
 
@@ -262,13 +260,13 @@ class User(BaseApp):
 
         Returns: boolean
         """
-        user, body = self._get_permission_params(user, permission, resource,
+        user, body = await self._get_permission_params(user, permission, resource,
             resource_value, context, context_value)
 
         return self.client.post(token=self.token, body=body,
             path=AclClient.USERS_PERMS, path_params={"user_term":user})
 
-    def remove_permission(self, user, permission, resource, resource_value,
+    async def remove_permission(self, user, permission, resource, resource_value,
         context=None, context_value=None):
         """Remove a permission from a user
 
@@ -282,7 +280,7 @@ class User(BaseApp):
 
         Returns: boolean
         """
-        user, param = self._get_permission_params(user, permission,
+        user, param = await self._get_permission_params(user, permission,
             resource, resource_value, context, context_value)
 
         return self.client.delete(token=self.token, params=param,
@@ -290,7 +288,7 @@ class User(BaseApp):
 
 class Role(BaseApp):
 
-    def list(self):
+    async def list(self):
         """Return a role list
 
         Returns: list
@@ -298,7 +296,7 @@ class Role(BaseApp):
         resp = self.client.get(token=self.token, path=AclClient.ROLES)
         return [RoleResource(user) for user in resp]
 
-    def get(self, role_term, company_id=1):
+    async def get(self, role_term, company_id=1):
         """Return a role
 
         Keyword Arguments:
@@ -313,7 +311,7 @@ class Role(BaseApp):
             params={"companyId": company_id})
         return RoleResource(resp)
 
-    def create(self, name, alias, description, company_id=1):
+    async def create(self, name, alias, description, company_id=1):
         """Create and return a role
 
         Keyword Arguments:
@@ -334,7 +332,7 @@ class Role(BaseApp):
             path=AclClient.ROLES)
         return RoleResource(resp)
 
-    def update(self, role, alias=None, description=None):
+    async def update(self, role, alias=None, description=None):
         """Update a Role
 
         Keyword Arguments:
@@ -357,7 +355,7 @@ class Role(BaseApp):
         return self.client.put(token=self.token, body=role_body,
             path=AclClient.ROLES_UNIQUE, path_params={"role_term":role})
 
-    def update_users(self, role, users, company_id=1):
+    async def update_users(self, role, users, company_id=1):
         """Update role users
 
         Keyword Arguments:
@@ -378,7 +376,7 @@ class Role(BaseApp):
         return self.client.put(token=self.token, body=body,
             path=AclClient.ROLES_USERS, path_params={"role_id":role})
 
-    def remove(self, role):
+    async def remove(self, role):
         """Remove a Role
 
         Keyword Arguments:
@@ -392,7 +390,7 @@ class Role(BaseApp):
         return self.client.delete(token=self.token,
             path=AclClient.ROLES_UNIQUE, path_params={"role_term":role})
 
-    def add_permission(self, role, permission, resource, resource_value,
+    async def add_permission(self, role, permission, resource, resource_value,
         context=None, context_value=None):
         """Add a permission to a role
 
@@ -406,14 +404,14 @@ class Role(BaseApp):
 
         Returns: resources.Role
         """
-        role, body = self._get_permission_params(role, permission, resource,
+        role, body = await self._get_permission_params(role, permission, resource,
             resource_value, context, context_value)
         self.client.post(token=self.token, body=body,
             path=AclClient.ROLES_PERMS, path_params={"role_term":role})
 
         return self.get(role)
 
-    def remove_permission(self, role, permission, resource, resource_value,
+    async def remove_permission(self, role, permission, resource, resource_value,
         context=None, context_value=None):
         """Remove a permission from a role
 
@@ -427,7 +425,7 @@ class Role(BaseApp):
 
         Returns: resources.Role
         """
-        role, param = self._get_permission_params(role, permission,
+        role, param = await self._get_permission_params(role, permission,
             resource, resource_value, context, context_value)
         self.client.delete(token=self.token, params=param,
             path=AclClient.ROLES_PERMS, path_params={"role_term":role})
@@ -442,7 +440,7 @@ class BatchUser(Batch):
         self._objs = []
         self.user  = None
 
-    def set_user(self, user):
+    async def set_user(self, user):
         """Set user to batch process
 
         Keyword Arguments:
@@ -452,7 +450,7 @@ class BatchUser(Batch):
             user = user.id
         self.user  = user
 
-    def add_permission(self, permission, resource, resource_value,
+    async def add_permission(self, permission, resource, resource_value,
         context=None, context_value=None):
         """Add a permission to batch process
 
@@ -463,15 +461,15 @@ class BatchUser(Batch):
         context        -- mixed (integer, string or resources.Context)
         context_value  -- string
         """
-        perm = self._get_permission_params(None, permission,
+        perm = await self._get_permission_params(None, permission,
             resource, resource_value, context, context_value)
         self._objs.append(perm[1])
 
-    def clear_permissions(self):
+    async def clear_permissions(self):
         """Clear a permissions from batch process"""
         self._objs = []
 
-    def execute(self):
+    async def execute(self):
         """Execute batch process
 
         Returns: boolean
@@ -496,7 +494,7 @@ class BatchRole(Batch):
         self._perms = []
         self._roles = []
 
-    def set_role(self, role):
+    async def set_role(self, role):
         """Set role to batch process
 
         Keyword Arguments:
@@ -506,7 +504,7 @@ class BatchRole(Batch):
             role = role.id
         self.role = role
 
-    def add_permission(self, permission, resource, resource_value,
+    async def add_permission(self, permission, resource, resource_value,
         context=None, context_value=None):
         """Add a permission to batch process
 
@@ -517,15 +515,15 @@ class BatchRole(Batch):
         context        -- mixed (integer, string or resources.Context)
         context_value  -- string
         """
-        perm = self._get_permission_params(None, permission,
+        perm = await self._get_permission_params(None, permission,
             resource, resource_value, context, context_value)
         self._perms.append(perm[1])
 
-    def clear_permissions(self):
+    async def clear_permissions(self):
         """Clear a permissions from batch process"""
         self._perms = []
 
-    def add_role(self, name, alias, description, system=False):
+    async def add_role(self, name, alias, description, system=False):
         """Add a role to batch process
 
         Keyword Arguments:
@@ -541,11 +539,11 @@ class BatchRole(Batch):
             'system': system
         })
 
-    def clear_roles(self):
+    async def clear_roles(self):
         """Clear a roles from batch process"""
         self._roles = []
 
-    def execute(self):
+    async def execute(self):
         """Execute batch process
 
         Returns: list
@@ -560,7 +558,7 @@ class BatchRole(Batch):
 
         return roles
 
-    def __execute_perms(self):
+    async def __execute_perms(self):
         """Execute batch process from Permissions"""
         if not self.role:
             raise Exception("Role must be setted")
@@ -571,7 +569,7 @@ class BatchRole(Batch):
 
         self.clear_permissions()
 
-    def __execute_roles(self):
+    async def __execute_roles(self):
         """Execute batch process from Roles
 
         Returns: list
