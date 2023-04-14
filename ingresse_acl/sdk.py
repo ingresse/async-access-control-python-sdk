@@ -1,20 +1,26 @@
-from ingresse_acl.client    import AclClient
-from ingresse_acl.client    import AclException
-from ingresse_acl.client    import AclError
-from ingresse_acl.resources import SdkResource
-from ingresse_acl.resources import User       as UserResource
-from ingresse_acl.resources import Role       as RoleResource
+from ingresse_acl.client import AclClient, AclError, AclException
+from ingresse_acl.resources import Context as ContextResource
 from ingresse_acl.resources import Permission as PermissionResource
-from ingresse_acl.resources import Resource   as ResourceResource
-from ingresse_acl.resources import Context    as ContextResource
+from ingresse_acl.resources import Resource as ResourceResource
+from ingresse_acl.resources import Role as RoleResource
+from ingresse_acl.resources import SdkResource
+from ingresse_acl.resources import User as UserResource
+
 
 class BaseApp(object):
-    token  = None
+    token = None
     client = None
 
-    async def _get_permission_params(self, item, permission, resource, resource_value,
-        context=None, context_value=None):
-        """ Get item id and Permissions dict
+    async def _get_permission_params(
+        self,
+        item,
+        permission,
+        resource,
+        resource_value,
+        context=None,
+        context_value=None,
+    ):
+        """Get item id and Permissions dict
 
         Keyword Arguments:
         item           -- mixed (integer, string, resources.SdkResource)
@@ -41,60 +47,66 @@ class BaseApp(object):
         params = {
             "permission": permission,
             "resource": resource,
-            "resourceValue": resource_value
+            "resourceValue": resource_value,
         }
 
         if context is not None:
-            params.update({
-                "context": context,
-                "contextValue": context_value
-            })
+            params.update({"context": context, "contextValue": context_value})
 
         return item, params
 
+
 class Batch(BaseApp):
     async def execute(self):
-        """ Executes Batch"""
+        """Executes Batch"""
         pass
+
 
 class IngresseACL(object):
     token = None
 
     def __init__(self, token, host=None):
-        """ Initiate instance
+        """Initiate instance
 
         Keyword Arguments:
         token       -- string
         environment -- string
         """
-        self.token  = token
+        self.token = token
         self.client = AclClient(host)
 
         self.User = User()
-        self.User.token  = self.token
+        self.User.token = self.token
         self.User.client = self.client
 
         self.Validate = Validate()
-        self.Validate.token  = self.token
+        self.Validate.token = self.token
         self.Validate.client = self.client
 
         self.Role = Role()
-        self.Role.token  = self.token
+        self.Role.token = self.token
         self.Role.client = self.client
 
         self.BatchUser = BatchUser()
-        self.BatchUser.token  = self.token
+        self.BatchUser.token = self.token
         self.BatchUser.client = self.client
 
         self.BatchRole = BatchRole()
-        self.BatchRole.token  = self.token
+        self.BatchRole.token = self.token
         self.BatchRole.client = self.client
 
 
 class Validate(BaseApp):
-
-    async def validate(self, user_id, permission, resource, resource_value="__ANY__",
-        context=None, context_value="__ANY__", company_id=1):
+    async def validate(
+        self,
+        user_id,
+        permission,
+        resource,
+        resource_value="__ANY__",
+        context=None,
+        context_value="__ANY__",
+        company_id=1,
+    ):
 
         query_params = {
             "ingresseId": user_id,
@@ -102,18 +114,18 @@ class Validate(BaseApp):
             "resource": resource,
             "resourceValue": resource_value,
             "contextValue": context_value,
-            "companyId": company_id
+            "companyId": company_id,
         }
 
         if context:
             query_params.update({"context": context})
 
-        return await self.client.get(token=self.token, path=AclClient.VALIDATE,
-            params=query_params)
+        return await self.client.get(
+            token=self.token, path=AclClient.VALIDATE, params=query_params
+        )
 
 
 class User(BaseApp):
-
     async def list(self):
         """Return a user list
 
@@ -131,10 +143,12 @@ class User(BaseApp):
 
         Returns: resources.User
         """
-        resp = await self.client.get(token=self.token,
+        resp = await self.client.get(
+            token=self.token,
             path=AclClient.USERS_UNIQUE,
-            path_params={"user_term":user_term},
-            params={"companyId": company_id})
+            path_params={"user_term": user_term},
+            params={"companyId": company_id},
+        )
         return UserResource(resp)
 
     async def create(self, ingresse_id, email, company_id=1):
@@ -147,13 +161,10 @@ class User(BaseApp):
 
         Returns: resources.User
         """
-        user_body = {
-            'ingresseId': ingresse_id,
-            'email': email,
-            'companyId': company_id
-        }
-        resp = await self.client.post(token=self.token, body=user_body,
-            path=AclClient.USERS)
+        user_body = {"ingresseId": ingresse_id, "email": email, "companyId": company_id}
+        resp = await self.client.post(
+            token=self.token, body=user_body, path=AclClient.USERS
+        )
         return UserResource(resp)
 
     async def update(self, user, email=None):
@@ -167,12 +178,16 @@ class User(BaseApp):
         """
         if isinstance(user, UserResource):
             email = user.email
-            user  = user.id
+            user = user.id
 
-        user_body = {"email":email}
+        user_body = {"email": email}
 
-        return await self.client.put(token=self.token, body=user_body,
-            path=AclClient.USERS_UNIQUE, path_params={"user_term":user})
+        return await self.client.put(
+            token=self.token,
+            body=user_body,
+            path=AclClient.USERS_UNIQUE,
+            path_params={"user_term": user},
+        )
 
     async def remove(self, user):
         """Remove a user
@@ -185,8 +200,11 @@ class User(BaseApp):
         if isinstance(user, UserResource):
             user = user.id
 
-        return await self.client.delete(token=self.token,
-            path=AclClient.USERS_UNIQUE, path_params={"user_term":user})
+        return await self.client.delete(
+            token=self.token,
+            path=AclClient.USERS_UNIQUE,
+            path_params={"user_term": user},
+        )
 
     async def get_roles(self, user, names=None):
         """Get the roles of an user
@@ -202,10 +220,14 @@ class User(BaseApp):
         query_params = {}
 
         if names:
-            query_params['names'] = names
+            query_params["names"] = names
 
-        resp = await self.client.get(token=self.token, params=query_params,
-        path=AclClient.USERS_ROLES, path_params={"user_term":user})
+        resp = await self.client.get(
+            token=self.token,
+            params=query_params,
+            path=AclClient.USERS_ROLES,
+            path_params={"user_term": user},
+        )
 
         return RoleResource(resp)
 
@@ -222,8 +244,12 @@ class User(BaseApp):
         if isinstance(role, RoleResource):
             role = role.id
 
-        resp = await self.client.post(token=self.token, body={"role": role},
-            path=AclClient.USERS_ROLES, path_params={"user_term":user})
+        resp = await self.client.post(
+            token=self.token,
+            body={"role": role},
+            path=AclClient.USERS_ROLES,
+            path_params={"user_term": user},
+        )
 
         return UserResource(resp)
 
@@ -242,12 +268,21 @@ class User(BaseApp):
         if isinstance(role, RoleResource):
             role = role.id
 
-        return await self.client.delete(token=self.token,
+        return await self.client.delete(
+            token=self.token,
             path=AclClient.USERS_ROLES_UNIQUE,
-            path_params={"user_term":user, "role_id":role})
+            path_params={"user_term": user, "role_id": role},
+        )
 
-    async def add_permission(self, user, permission, resource, resource_value,
-        context=None, context_value=None):
+    async def add_permission(
+        self,
+        user,
+        permission,
+        resource,
+        resource_value,
+        context=None,
+        context_value=None,
+    ):
         """Add a permission to a user
 
         Keyword Arguments:
@@ -260,14 +295,26 @@ class User(BaseApp):
 
         Returns: boolean
         """
-        user, body = await self._get_permission_params(user, permission, resource,
-            resource_value, context, context_value)
+        user, body = await self._get_permission_params(
+            user, permission, resource, resource_value, context, context_value
+        )
 
-        return await self.client.post(token=self.token, body=body,
-            path=AclClient.USERS_PERMS, path_params={"user_term":user})
+        return await self.client.post(
+            token=self.token,
+            body=body,
+            path=AclClient.USERS_PERMS,
+            path_params={"user_term": user},
+        )
 
-    async def remove_permission(self, user, permission, resource, resource_value,
-        context=None, context_value=None):
+    async def remove_permission(
+        self,
+        user,
+        permission,
+        resource,
+        resource_value,
+        context=None,
+        context_value=None,
+    ):
         """Remove a permission from a user
 
         Keyword Arguments:
@@ -280,14 +327,19 @@ class User(BaseApp):
 
         Returns: boolean
         """
-        user, param = await self._get_permission_params(user, permission,
-            resource, resource_value, context, context_value)
+        user, param = await self._get_permission_params(
+            user, permission, resource, resource_value, context, context_value
+        )
 
-        return await self.client.delete(token=self.token, params=param,
-            path=AclClient.USERS_PERMS, path_params={"user_term":user})
+        return await self.client.delete(
+            token=self.token,
+            params=param,
+            path=AclClient.USERS_PERMS,
+            path_params={"user_term": user},
+        )
+
 
 class Role(BaseApp):
-
     async def list(self):
         """Return a role list
 
@@ -305,10 +357,12 @@ class Role(BaseApp):
 
         Returns: resources.Role
         """
-        resp = await self.client.get(token=self.token,
+        resp = await self.client.get(
+            token=self.token,
             path=AclClient.ROLES_UNIQUE,
-            path_params={"role_term":role_term},
-            params={"companyId": company_id})
+            path_params={"role_term": role_term},
+            params={"companyId": company_id},
+        )
         return RoleResource(resp)
 
     async def create(self, name, alias, description, company_id=1):
@@ -323,13 +377,14 @@ class Role(BaseApp):
         Returns: resources.Role
         """
         role_body = {
-            'name': name,
-            'alias': alias,
-            'description': description,
-            'companyId': company_id
+            "name": name,
+            "alias": alias,
+            "description": description,
+            "companyId": company_id,
         }
-        resp = await self.client.post(token=self.token, body=role_body,
-            path=AclClient.ROLES)
+        resp = await self.client.post(
+            token=self.token, body=role_body, path=AclClient.ROLES
+        )
         return RoleResource(resp)
 
     async def update(self, role, alias=None, description=None):
@@ -343,17 +398,18 @@ class Role(BaseApp):
         Returns: boolean
         """
         if isinstance(role, RoleResource):
-            alias       = role.alias
+            alias = role.alias
             description = role.description
-            role        = role.id
+            role = role.id
 
-        role_body = {
-            "alias": alias,
-            "description": description
-        }
+        role_body = {"alias": alias, "description": description}
 
-        return await self.client.put(token=self.token, body=role_body,
-            path=AclClient.ROLES_UNIQUE, path_params={"role_term":role})
+        return await self.client.put(
+            token=self.token,
+            body=role_body,
+            path=AclClient.ROLES_UNIQUE,
+            path_params={"role_term": role},
+        )
 
     async def update_users(self, role, users, company_id=1):
         """Update role users
@@ -368,13 +424,14 @@ class Role(BaseApp):
         if isinstance(role, RoleResource):
             role = role.id
 
-        body = {
-            "users": users,
-            "companyId": company_id
-        }
+        body = {"users": users, "companyId": company_id}
 
-        return await self.client.put(token=self.token, body=body,
-            path=AclClient.ROLES_USERS, path_params={"role_id":role})
+        return await self.client.put(
+            token=self.token,
+            body=body,
+            path=AclClient.ROLES_USERS,
+            path_params={"role_id": role},
+        )
 
     async def remove(self, role):
         """Remove a Role
@@ -387,11 +444,21 @@ class Role(BaseApp):
         if isinstance(role, RoleResource):
             role = role.id
 
-        return await self.client.delete(token=self.token,
-            path=AclClient.ROLES_UNIQUE, path_params={"role_term":role})
+        return await self.client.delete(
+            token=self.token,
+            path=AclClient.ROLES_UNIQUE,
+            path_params={"role_term": role},
+        )
 
-    async def add_permission(self, role, permission, resource, resource_value,
-        context=None, context_value=None):
+    async def add_permission(
+        self,
+        role,
+        permission,
+        resource,
+        resource_value,
+        context=None,
+        context_value=None,
+    ):
         """Add a permission to a role
 
         Keyword Arguments:
@@ -404,15 +471,27 @@ class Role(BaseApp):
 
         Returns: resources.Role
         """
-        role, body = await self._get_permission_params(role, permission, resource,
-            resource_value, context, context_value)
-        await self.client.post(token=self.token, body=body,
-            path=AclClient.ROLES_PERMS, path_params={"role_term":role})
+        role, body = await self._get_permission_params(
+            role, permission, resource, resource_value, context, context_value
+        )
+        await self.client.post(
+            token=self.token,
+            body=body,
+            path=AclClient.ROLES_PERMS,
+            path_params={"role_term": role},
+        )
 
         return self.get(role)
 
-    async def remove_permission(self, role, permission, resource, resource_value,
-        context=None, context_value=None):
+    async def remove_permission(
+        self,
+        role,
+        permission,
+        resource,
+        resource_value,
+        context=None,
+        context_value=None,
+    ):
         """Remove a permission from a role
 
         Keyword Arguments:
@@ -425,20 +504,25 @@ class Role(BaseApp):
 
         Returns: resources.Role
         """
-        role, param = await self._get_permission_params(role, permission,
-            resource, resource_value, context, context_value)
-        await self.client.delete(token=self.token, params=param,
-            path=AclClient.ROLES_PERMS, path_params={"role_term":role})
+        role, param = await self._get_permission_params(
+            role, permission, resource, resource_value, context, context_value
+        )
+        await self.client.delete(
+            token=self.token,
+            params=param,
+            path=AclClient.ROLES_PERMS,
+            path_params={"role_term": role},
+        )
 
         return self.get(role)
 
-class BatchUser(Batch):
 
+class BatchUser(Batch):
     def __init__(self):
         """Initiates instance"""
         super(BatchUser, self).__init__()
         self._objs = []
-        self.user  = None
+        self.user = None
 
     async def set_user(self, user):
         """Set user to batch process
@@ -448,10 +532,11 @@ class BatchUser(Batch):
         """
         if isinstance(user, UserResource):
             user = user.id
-        self.user  = user
+        self.user = user
 
-    async def add_permission(self, permission, resource, resource_value,
-        context=None, context_value=None):
+    async def add_permission(
+        self, permission, resource, resource_value, context=None, context_value=None
+    ):
         """Add a permission to batch process
 
         Keyword Arguments:
@@ -461,8 +546,9 @@ class BatchUser(Batch):
         context        -- mixed (integer, string or resources.Context)
         context_value  -- string
         """
-        perm = await self._get_permission_params(None, permission,
-            resource, resource_value, context, context_value)
+        perm = await self._get_permission_params(
+            None, permission, resource, resource_value, context, context_value
+        )
         self._objs.append(perm[1])
 
     async def clear_permissions(self):
@@ -477,20 +563,23 @@ class BatchUser(Batch):
         if not self.user:
             raise Exception("User must be setted")
 
-        await self.client.post(token=self.token, body=self._objs,
+        await self.client.post(
+            token=self.token,
+            body=self._objs,
             path=AclClient.BATCH_USERS_PERM,
-            path_params={"user_term":self.user})
+            path_params={"user_term": self.user},
+        )
 
         self.clear_permissions()
 
         return True
 
-class BatchRole(Batch):
 
+class BatchRole(Batch):
     def __init__(self):
         """Initiates instance"""
         super(BatchRole, self).__init__()
-        self.role   = None
+        self.role = None
         self._perms = []
         self._roles = []
 
@@ -504,8 +593,9 @@ class BatchRole(Batch):
             role = role.id
         self.role = role
 
-    async def add_permission(self, permission, resource, resource_value,
-        context=None, context_value=None):
+    async def add_permission(
+        self, permission, resource, resource_value, context=None, context_value=None
+    ):
         """Add a permission to batch process
 
         Keyword Arguments:
@@ -515,8 +605,9 @@ class BatchRole(Batch):
         context        -- mixed (integer, string or resources.Context)
         context_value  -- string
         """
-        perm = await self._get_permission_params(None, permission,
-            resource, resource_value, context, context_value)
+        perm = await self._get_permission_params(
+            None, permission, resource, resource_value, context, context_value
+        )
         self._perms.append(perm[1])
 
     async def clear_permissions(self):
@@ -532,12 +623,9 @@ class BatchRole(Batch):
         description -- string
         system      -- boolean
         """
-        self._roles.append({
-            'name': name,
-            'alias': alias,
-            'description': description,
-            'system': system
-        })
+        self._roles.append(
+            {"name": name, "alias": alias, "description": description, "system": system}
+        )
 
     async def clear_roles(self):
         """Clear a roles from batch process"""
@@ -563,9 +651,12 @@ class BatchRole(Batch):
         if not self.role:
             raise Exception("Role must be setted")
 
-        await self.client.post(token=self.token, body=self._perms,
+        await self.client.post(
+            token=self.token,
+            body=self._perms,
             path=AclClient.BATCH_ROLES_PERM,
-            path_params={"role_term":self.role})
+            path_params={"role_term": self.role},
+        )
 
         self.clear_permissions()
 
@@ -574,10 +665,10 @@ class BatchRole(Batch):
 
         Returns: list
         """
-        roles = await self.client.post(token=self.token, body=self._roles,
-            path=AclClient.BATCH_ROLES)
+        roles = await self.client.post(
+            token=self.token, body=self._roles, path=AclClient.BATCH_ROLES
+        )
 
         self.clear_roles()
 
         return roles
-

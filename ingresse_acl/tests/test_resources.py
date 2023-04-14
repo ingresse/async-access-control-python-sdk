@@ -2,8 +2,8 @@ import unittest
 
 from ingresse_acl.resources import *
 
-class testSdkResource(unittest.TestCase):
 
+class testSdkResource(unittest.TestCase):
     def test_get_dict(self):
         expected = None
 
@@ -11,8 +11,8 @@ class testSdkResource(unittest.TestCase):
 
         self.assertEqual(expected, item.get_dict())
 
-class testUser(unittest.TestCase):
 
+class testUser(unittest.TestCase):
     def test_get_dict(self):
         expected = {"id": 1, "email": "user1@ing.com", "ingresseId": 1}
 
@@ -20,72 +20,72 @@ class testUser(unittest.TestCase):
 
         self.assertItemsEqual(expected, item.get_dict())
 
-class testRole(unittest.TestCase):
 
+class testRole(unittest.TestCase):
     def test_get_dict(self):
         expected = {
             "id": 1,
             "name": "name-1",
             "alias": "alias 1",
             "description": "desc 1",
-            "system": True
+            "system": True,
         }
 
         item = Role(expected)
 
         self.assertItemsEqual(expected, item.get_dict())
 
-class testPermission(unittest.TestCase):
 
+class testPermission(unittest.TestCase):
     def test_get_dict(self):
         expected = {
             "id": 1,
             "name": "name-1",
             "alias": "alias 1",
-            "description": "desc 1"
+            "description": "desc 1",
         }
 
         item = Permission(expected)
 
         self.assertItemsEqual(expected, item.get_dict())
 
-class testResource(unittest.TestCase):
 
+class testResource(unittest.TestCase):
     def test_get_dict(self):
         expected = {
             "id": 1,
             "name": "name-1",
             "alias": "alias 1",
-            "description": "desc 1"
+            "description": "desc 1",
         }
 
         item = Resource(expected)
 
         self.assertItemsEqual(expected, item.get_dict())
 
-class testContext(unittest.TestCase):
 
+class testContext(unittest.TestCase):
     def test_get_dict(self):
         expected = {
             "id": 1,
             "name": "name-1",
             "alias": "alias 1",
-            "description": "desc 1"
+            "description": "desc 1",
         }
 
         item = Context(expected)
 
         self.assertItemsEqual(expected, item.get_dict())
 
-class testRolePermission(unittest.TestCase):
 
+class testRolePermission(unittest.TestCase):
     def test_get_dict(self):
         perm = {
             "permission": "perm",
             "resourceName": "res-1",
             "contextName": "ctx-1",
             "resourceValue": "val1",
-            "contextValue": "val2"
+            "contextValue": "val2",
         }
 
         item = RolePermission(perm)
@@ -95,20 +95,20 @@ class testRolePermission(unittest.TestCase):
             "resource": "res-1",
             "resourceValue": "val1",
             "context": "ctx-1",
-            "contextValue": "val2"
+            "contextValue": "val2",
         }
 
         self.assertItemsEqual(expected, item.get_dict())
 
-class testUserPermission(unittest.TestCase):
 
+class testUserPermission(unittest.TestCase):
     def test_get_dict(self):
         perm = {
             "permission": "perm",
             "resourceName": "res-1",
             "contextName": "ctx-1",
             "resourceValue": "val1",
-            "contextValue": "val2"
+            "contextValue": "val2",
         }
 
         item = UserPermission(perm)
@@ -118,7 +118,7 @@ class testUserPermission(unittest.TestCase):
             "resource": "res-1",
             "resourceValue": "val1",
             "context": "ctx-1",
-            "contextValue": "val2"
+            "contextValue": "val2",
         }
 
         self.assertItemsEqual(expected, item.get_dict())

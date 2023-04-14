@@ -1,4 +1,5 @@
-import sys, os
+import os
+import sys
 
 project_path = os.path.dirname(__file__)
 
