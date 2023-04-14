@@ -1,5 +1,5 @@
 class SdkResource(object):
-    def get_dict(self):
+    async def get_dict(self):
         """Return dict with resource values"""
         pass
 
@@ -16,7 +16,7 @@ class User(SdkResource):
         self.permissions = [ UserPermission(item) for item in user.get("permissions", []) ]
         self.roles       = [ Role(item) for item in user.get("roles", []) ]
 
-    def get_dict(self):
+    async def get_dict(self):
         """Return dict with resource values
 
         Return: dict
@@ -42,7 +42,7 @@ class Role(SdkResource):
         self.permissions = [ RolePermission(item) for item in role.get("permissions", []) ]
         self.users       = [ User(item) for item in role.get("users", []) ]
 
-    def get_dict(self):
+    async def get_dict(self):
         """Return dict with resource values
 
         Return: dict
@@ -70,7 +70,7 @@ class Permission(SdkResource):
         self.alias       = permission.get("alias")
         self.description = permission.get("description")
 
-    def get_dict(self):
+    async def get_dict(self):
         """Return dict with resource values
 
         Return: dict
@@ -103,7 +103,7 @@ class RolePermission(SdkResource):
         self.context        = permission.get("contextName")
         self.context_value  = permission.get("contextValue")
 
-    def get_dict(self):
+    async def get_dict(self):
         """Return dict with resource values
 
         Return: dict

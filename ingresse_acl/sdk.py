@@ -108,7 +108,7 @@ class Validate(BaseApp):
         if context:
             query_params.update({"context": context})
 
-        return self.client.get(token=self.token, path=AclClient.VALIDATE,
+        return await self.client.get(token=self.token, path=AclClient.VALIDATE,
             params=query_params)
 
 
@@ -119,7 +119,7 @@ class User(BaseApp):
 
         Returns: list
         """
-        resp = self.client.get(token=self.token, path=AclClient.USERS)
+        resp = await self.client.get(token=self.token, path=AclClient.USERS)
         return [UserResource(user) for user in resp]
 
     async def get(self, user_term, company_id=1):
@@ -131,7 +131,7 @@ class User(BaseApp):
 
         Returns: resources.User
         """
-        resp = self.client.get(token=self.token,
+        resp = await self.client.get(token=self.token,
             path=AclClient.USERS_UNIQUE,
             path_params={"user_term":user_term},
             params={"companyId": company_id})
@@ -152,7 +152,7 @@ class User(BaseApp):
             'email': email,
             'companyId': company_id
         }
-        resp = self.client.post(token=self.token, body=user_body,
+        resp = await self.client.post(token=self.token, body=user_body,
             path=AclClient.USERS)
         return UserResource(resp)
 
@@ -171,7 +171,7 @@ class User(BaseApp):
 
         user_body = {"email":email}
 
-        return self.client.put(token=self.token, body=user_body,
+        return await self.client.put(token=self.token, body=user_body,
             path=AclClient.USERS_UNIQUE, path_params={"user_term":user})
 
     async def remove(self, user):
@@ -185,7 +185,7 @@ class User(BaseApp):
         if isinstance(user, UserResource):
             user = user.id
 
-        return self.client.delete(token=self.token,
+        return await self.client.delete(token=self.token,
             path=AclClient.USERS_UNIQUE, path_params={"user_term":user})
 
     async def get_roles(self, user, names=None):
@@ -204,7 +204,7 @@ class User(BaseApp):
         if names:
             query_params['names'] = names
 
-        resp = self.client.get(token=self.token, params=query_params,
+        resp = await self.client.get(token=self.token, params=query_params,
         path=AclClient.USERS_ROLES, path_params={"user_term":user})
 
         return RoleResource(resp)
@@ -222,7 +222,7 @@ class User(BaseApp):
         if isinstance(role, RoleResource):
             role = role.id
 
-        resp = self.client.post(token=self.token, body={"role": role},
+        resp = await self.client.post(token=self.token, body={"role": role},
             path=AclClient.USERS_ROLES, path_params={"user_term":user})
 
         return UserResource(resp)
@@ -242,7 +242,7 @@ class User(BaseApp):
         if isinstance(role, RoleResource):
             role = role.id
 
-        return self.client.delete(token=self.token,
+        return await self.client.delete(token=self.token,
             path=AclClient.USERS_ROLES_UNIQUE,
             path_params={"user_term":user, "role_id":role})
 
@@ -263,7 +263,7 @@ class User(BaseApp):
         user, body = await self._get_permission_params(user, permission, resource,
             resource_value, context, context_value)
 
-        return self.client.post(token=self.token, body=body,
+        return await self.client.post(token=self.token, body=body,
             path=AclClient.USERS_PERMS, path_params={"user_term":user})
 
     async def remove_permission(self, user, permission, resource, resource_value,
@@ -283,7 +283,7 @@ class User(BaseApp):
         user, param = await self._get_permission_params(user, permission,
             resource, resource_value, context, context_value)
 
-        return self.client.delete(token=self.token, params=param,
+        return await self.client.delete(token=self.token, params=param,
             path=AclClient.USERS_PERMS, path_params={"user_term":user})
 
 class Role(BaseApp):
@@ -293,7 +293,7 @@ class Role(BaseApp):
 
         Returns: list
         """
-        resp = self.client.get(token=self.token, path=AclClient.ROLES)
+        resp = await self.client.get(token=self.token, path=AclClient.ROLES)
         return [RoleResource(user) for user in resp]
 
     async def get(self, role_term, company_id=1):
@@ -305,7 +305,7 @@ class Role(BaseApp):
 
         Returns: resources.Role
         """
-        resp = self.client.get(token=self.token,
+        resp = await self.client.get(token=self.token,
             path=AclClient.ROLES_UNIQUE,
             path_params={"role_term":role_term},
             params={"companyId": company_id})
@@ -328,7 +328,7 @@ class Role(BaseApp):
             'description': description,
             'companyId': company_id
         }
-        resp = self.client.post(token=self.token, body=role_body,
+        resp = await self.client.post(token=self.token, body=role_body,
             path=AclClient.ROLES)
         return RoleResource(resp)
 
@@ -352,7 +352,7 @@ class Role(BaseApp):
             "description": description
         }
 
-        return self.client.put(token=self.token, body=role_body,
+        return await self.client.put(token=self.token, body=role_body,
             path=AclClient.ROLES_UNIQUE, path_params={"role_term":role})
 
     async def update_users(self, role, users, company_id=1):
@@ -373,7 +373,7 @@ class Role(BaseApp):
             "companyId": company_id
         }
 
-        return self.client.put(token=self.token, body=body,
+        return await self.client.put(token=self.token, body=body,
             path=AclClient.ROLES_USERS, path_params={"role_id":role})
 
     async def remove(self, role):
@@ -387,7 +387,7 @@ class Role(BaseApp):
         if isinstance(role, RoleResource):
             role = role.id
 
-        return self.client.delete(token=self.token,
+        return await self.client.delete(token=self.token,
             path=AclClient.ROLES_UNIQUE, path_params={"role_term":role})
 
     async def add_permission(self, role, permission, resource, resource_value,
@@ -406,7 +406,7 @@ class Role(BaseApp):
         """
         role, body = await self._get_permission_params(role, permission, resource,
             resource_value, context, context_value)
-        self.client.post(token=self.token, body=body,
+        await self.client.post(token=self.token, body=body,
             path=AclClient.ROLES_PERMS, path_params={"role_term":role})
 
         return self.get(role)
@@ -427,7 +427,7 @@ class Role(BaseApp):
         """
         role, param = await self._get_permission_params(role, permission,
             resource, resource_value, context, context_value)
-        self.client.delete(token=self.token, params=param,
+        await self.client.delete(token=self.token, params=param,
             path=AclClient.ROLES_PERMS, path_params={"role_term":role})
 
         return self.get(role)
@@ -477,7 +477,7 @@ class BatchUser(Batch):
         if not self.user:
             raise Exception("User must be setted")
 
-        self.client.post(token=self.token, body=self._objs,
+        await self.client.post(token=self.token, body=self._objs,
             path=AclClient.BATCH_USERS_PERM,
             path_params={"user_term":self.user})
 
@@ -563,7 +563,7 @@ class BatchRole(Batch):
         if not self.role:
             raise Exception("Role must be setted")
 
-        self.client.post(token=self.token, body=self._perms,
+        await self.client.post(token=self.token, body=self._perms,
             path=AclClient.BATCH_ROLES_PERM,
             path_params={"role_term":self.role})
 
@@ -574,7 +574,7 @@ class BatchRole(Batch):
 
         Returns: list
         """
-        roles = self.client.post(token=self.token, body=self._roles,
+        roles = await self.client.post(token=self.token, body=self._roles,
             path=AclClient.BATCH_ROLES)
 
         self.clear_roles()
