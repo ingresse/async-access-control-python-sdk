@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "async-access-control-python-sdk"
+version = "0.5.0"
+description = ""
+authors = ["Marcus Vinicius Campos <marcus.campos@ingresse.com>"]
+readme = "README.md"
+packages = [{include = "async_access_control_python_sdk"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+httpx = "^0.23.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
