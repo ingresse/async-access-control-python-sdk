@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-VERSION = "0.5.0"
+VERSION = "0.5.1"
 
 setup(
     name="async-ingresse-access-control",
@@ -9,7 +9,7 @@ setup(
     long_description="Ingresse Access Control python SDK library to use the Access Control micro-service.",
     url="https://github.com/ingresse/async-access-control-python-sdk",
     author="Ingresse",
-    author_email="carlos.corcioli@ingresse.com",
+    author_email="marcus.campos@ingresse.com",
     license="BSD",
     packages=find_packages(),
     install_requires=["requests"],

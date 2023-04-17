@@ -1,6 +1,6 @@
 import unittest
 
-from ingresse_acl.resources import *
+from async_ingresse_acl.resources import *
 
 
 class testSdkResource(unittest.TestCase):
