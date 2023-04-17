@@ -62,7 +62,7 @@ class Batch(BaseApp):
         pass
 
 
-class IngresseACL(object):
+class AsyncIngresseACL(object):
     token = None
 
     def __init__(self, token, host=None):
