@@ -2,7 +2,7 @@ import json
 
 import httpx
 
-from ingresse_acl.sdk import VERSION
+from async_ingresse_acl.sdk import VERSION
 
 HOST = "https://acl.ingresse.com"
 

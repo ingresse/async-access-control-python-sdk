@@ -1,10 +1,10 @@
-from ingresse_acl.client import AclClient, AclError, AclException
-from ingresse_acl.resources import Context as ContextResource
-from ingresse_acl.resources import Permission as PermissionResource
-from ingresse_acl.resources import Resource as ResourceResource
-from ingresse_acl.resources import Role as RoleResource
-from ingresse_acl.resources import SdkResource
-from ingresse_acl.resources import User as UserResource
+from async_ingresse_acl.client import AclClient, AclError, AclException
+from async_ingresse_acl.resources import Context as ContextResource
+from async_ingresse_acl.resources import Permission as PermissionResource
+from async_ingresse_acl.resources import Resource as ResourceResource
+from async_ingresse_acl.resources import Role as RoleResource
+from async_ingresse_acl.resources import SdkResource
+from async_ingresse_acl.resources import User as UserResource
 
 
 class BaseApp(object):
