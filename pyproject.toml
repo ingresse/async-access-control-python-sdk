@@ -1,10 +1,10 @@
 [tool.poetry]
 name = "async-access-control-python-sdk"
-version = "0.5.0"
+version = "0.5.1"
 description = ""
 authors = ["Marcus Vinicius Campos <marcus.campos@ingresse.com>"]
 readme = "README.md"
-packages = [{include = "async_access_control_python_sdk"}]
+packages = [{include = "async_ingresse_acl"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
