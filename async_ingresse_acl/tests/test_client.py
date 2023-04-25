@@ -4,7 +4,7 @@ import unittest
 import mock
 
 from async_ingresse_acl.client import *
-from async_ingresse_acl.sdk import VERSION
+
 
 
 class testAclException(unittest.TestCase):
