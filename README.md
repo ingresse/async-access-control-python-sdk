@@ -3,7 +3,7 @@
 ## Install
 
 ```
-pip install git+https://github.com/ingresse/access-control-python-sdk.git@@{version}#egg=ingresse_acl
+pip install git+https://github.com/ingresse/async-access-control-python-sdk.git@@{version}#egg=ingresse_acl
 ```
 
 Replace `{version}` for the Release Version you want
