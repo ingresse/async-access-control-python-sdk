@@ -123,9 +123,6 @@ class AclClient(object):
 
         self.host = host
 
-        with httpx.AsyncClient() as client:
-            self.client = client
-
     async def get(self, token, path, path_params={}, params={}):
         """Performs a GET request
 
@@ -137,11 +134,12 @@ class AclClient(object):
 
         Returns: mixed
         """
-        url = await self.__get_url(path, path_params)
-        headers = await self.__get_header(token, "get")
-        response = await self.client.get(url, headers=headers, params=params)
-        await self.__validate_response(response)
-        return response.json().get("data", {})
+        async with httpx.AsyncClient() as client:
+            url = await self.__get_url(path, path_params)
+            headers = await self.__get_header(token, "get")
+            response = await client.get(url, headers=headers, params=params)
+            await self.__validate_response(response)
+            return response.json().get("data", {})
 
     async def post(self, token, path, path_params={}, body={}):
         """Performs a POST request
@@ -154,11 +152,12 @@ class AclClient(object):
 
         Returns: mixed
         """
-        url = await self.__get_url(path, path_params)
-        headers = await self.__get_header(token, "post")
-        response = await self.client.post(url, headers=headers, data=json.dumps(body))
-        await self.__validate_response(response)
-        return response.json().get("data", {})
+        async with httpx.AsyncClient() as client:
+            url = await self.__get_url(path, path_params)
+            headers = await self.__get_header(token, "post")
+            response = await client.post(url, headers=headers, data=json.dumps(body))
+            await self.__validate_response(response)
+            return response.json().get("data", {})
 
     async def put(self, token, path, path_params={}, body={}):
         """Performs a PUT request
@@ -171,11 +170,12 @@ class AclClient(object):
 
         Returns: boolean
         """
-        url = await self.__get_url(path, path_params)
-        headers = await self.__get_header(token, "put")
-        response = await self.client.put(url, headers=headers, data=json.dumps(body))
-        await self.__validate_response(response)
-        return True
+        async with httpx.AsyncClient() as client:
+            url = await self.__get_url(path, path_params)
+            headers = await self.__get_header(token, "put")
+            response = await client.put(url, headers=headers, data=json.dumps(body))
+            await self.__validate_response(response)
+            return True
 
     async def delete(self, token, path, path_params={}, params={}):
         """Performs a DELETE request
@@ -188,11 +188,12 @@ class AclClient(object):
 
         Returns: boolean
         """
-        url = await self.__get_url(path, path_params)
-        headers = await self.__get_header(token, "delete")
-        response = await self.client.delete(url, headers=headers, params=params)
-        await self.__validate_response(response)
-        return True
+        async with httpx.AsyncClient() as client:
+            url = await self.__get_url(path, path_params)
+            headers = await self.__get_header(token, "delete")
+            response = await client.delete(url, headers=headers, params=params)
+            await self.__validate_response(response)
+            return True
 
     async def __validate_response(self, response):
         """Validates the response
@@ -228,7 +229,7 @@ class AclClient(object):
         """
         header = {
             "Authorization": "Bearer {}".format(token),
-            "User-Agent": "ingresse-acl-python-sdk/{}".format(VERSION),
+            "User-Agent": "async-ingresse-acl-python-sdk",
         }
 
         if method in ["post", "put"]:
